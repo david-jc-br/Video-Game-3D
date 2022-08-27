@@ -160,7 +160,7 @@ void draw()
 
 //--------------------------------------------------------------------------------------
 
-void sMenuResolution(int option)
+void subMenuResolution(int option)
 {
 	switch (option)
 	{
@@ -185,7 +185,7 @@ void sMenuResolution(int option)
 
 }
 
-void sMenuChangeSetence(int option)
+void subMenuChangeSetence(int option)
 {
 	switch (option)
 	{
@@ -197,7 +197,7 @@ void sMenuChangeSetence(int option)
 			cout << "Frase do Display alterada para \"hello World\"" << endl;
 			break;
 		case 3:
-			cout << "Frase do Display alterada para \"Computa��o Grafica\"" << endl;
+			cout << "Frase do Display alterada para \"Computação Grafica\"" << endl;
 			break;
 		case 4:
 			cout << "Frase do Display alterada para \"GAC104\"" << endl;
@@ -218,46 +218,32 @@ void menuPrincipal(int option)
 
 void menuPopUp()
 {
-	int subMenuResolution, subMenuChangeSetence;
+	int sMenuResolution, sMenuChangeSetence;
 
-	subMenuResolution = glutCreateMenu(sMenuResolution);
+	sMenuResolution = glutCreateMenu(subMenuResolution);
 
 	glutAddMenuEntry("SD", 2);
 	glutAddMenuEntry("HD", 3);
 	glutAddMenuEntry("FHD", 4);
 	glutAddMenuEntry("Tela Cheia", 1);
 
-	subMenuChangeSetence = glutCreateMenu(sMenuChangeSetence);
+	sMenuChangeSetence = glutCreateMenu(subMenuChangeSetence);
 
-	glutAddMenuEntry("Ol� Mundo", 1);
+	glutAddMenuEntry("Olá Mundo", 1);
 	glutAddMenuEntry("Hello World", 2);
 	glutAddMenuEntry("Computação Gráfica", 3);
 	glutAddMenuEntry("GAC104", 4);
 
 	glutCreateMenu(menuPrincipal);
 
-	glutAddSubMenu("Alterar Resolução", subMenuResolution);
-	glutAddSubMenu("Alterar frase do Display", subMenuChangeSetence);
+	glutAddSubMenu("Alterar Resolução", sMenuResolution);
+	glutAddSubMenu("Alterar frase do Display", sMenuChangeSetence);
 	glutAddMenuEntry("Sair", 0);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
-
 }
 
 //-------------------------------------------------------------------------------------
-
-void reshape(int w, int h)
-{
-	float aspect = (float)w / (float)h;
-
-	glViewport(0, 0, w, h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluPerspective(60, aspect, 0.5, 100);
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-	gluLookAt(cam.obsX, cam.obsY, cam.obsZ, 0, 0, 0, 0, 0, 1);
-}
 
 void keyboard(unsigned char key, int x, int y)
 {
@@ -284,13 +270,13 @@ void keyboard(unsigned char key, int x, int y)
 
 		case '2':
 			if (op == 1) {
-				cout << "Ilumin��o Desativada" << endl;
+				cout << "Iluminação Desativada" << endl;
 				glDisable(GL_LIGHTING);
 				op = 0;
 			}
 			else
 			{
-				cout << "Ilumina��o Ativada" << endl;
+				cout << "Iluminação Ativada" << endl;
 				glEnable(GL_LIGHTING);
 				op = 1;
 			}
@@ -308,6 +294,8 @@ void mouse(int button, int state, int x, int y)
 {
 	// Ao clicar com o botão direito, mudar a cor da letra no display
 }
+
+//-------------------------------------------------------------------------------------
 
 void init()
 {
@@ -335,6 +323,21 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_DEPTH);
 }
+
+void reshape(int w, int h)
+{
+	float aspect = (float)w / (float)h;
+
+	glViewport(0, 0, w, h);
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluPerspective(60, aspect, 0.5, 100);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
+	gluLookAt(cam.obsX, cam.obsY, cam.obsZ, 0, 0, 0, 0, 0, 1);
+}
+
+//-------------------------------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
