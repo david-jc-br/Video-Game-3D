@@ -7,7 +7,7 @@ using namespace std;
 int w = 1920, h = 1080;
 short op = 1, op0 = 1;
 
-GLdouble angle = 0;
+GLfloat angle = 0;
 
 struct observer
 {
@@ -23,7 +23,7 @@ void initializeCam()
 	// Inicia valores do observador 
 	cam.obsX = 25;
 	cam.obsY = -10;
-	cam.obsZ = 18;
+	cam.obsZ = 22;
 }
 
 // objetos 3D
@@ -31,7 +31,7 @@ void initializeCam()
 void drawBox()
 {
 	glPushMatrix();
-	glColor3f(0.9f, 0.9f, 0.4f);
+	glColor3f(0.1f, 0.5f, 0.6f);
 	glTranslated(0, 0, 50);
 	glutSolidCube(100);
 	glPopMatrix();
@@ -62,7 +62,7 @@ void drawDisplayVideoGame()
 void drawBodyVideoGame()
 {
 	glBegin(GL_QUADS);
-		glColor3f(0.9f, 0.9f, 0.9f);
+		glColor3f(0.8f, 0.8f, 0.8f);
 		glNormal3f(0.f, 0.f, -1.f);
 		glVertex3i(0, 0, 15);  //Front
 		glVertex3i(0, 10, 15);
@@ -122,7 +122,7 @@ void drawButtonsVideoGame()
 	glEnd();
 
 	glBegin(GL_QUADS);
-		glColor3f(0.1f, 0.1f, 0.1f);
+		glColor3f(0.1f, 0.1f, 0.1f); // botão cruz
 		glNormal3f(0.f, 0.f, 1.f);
 		glVertex3i(3, 2, 6);
 		glVertex3i(3, 2, 5);
@@ -139,7 +139,73 @@ void drawButtonsVideoGame()
 		glVertex3i(3, 3, 3);
 		glVertex3i(3, 3, 4);
 	glEnd();
+		
+	glBegin(GL_QUADS); // botões quadrados
+		glColor3f(0.5f, 0.5f, 0.5f);
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(3, 4, 1);
+		glVertex3i(3, 5, 1);
+		glVertex3i(3, 5, 2);
+		glVertex3i(3, 4, 2);
 
+		glVertex3i(3, 6, 1);
+		glVertex3i(3, 7, 1);
+		glVertex3i(3, 7, 2);
+		glVertex3i(3, 6, 2);
+
+		glColor3f(0.7f, 0.0f, 0.0f);
+		glVertex3i(3, 6, 3);
+		glVertex3i(3, 7, 3);
+		glVertex3i(3, 7, 4);
+		glVertex3i(3, 6, 4);
+
+		glVertex3i(3, 8, 5);
+		glVertex3i(3, 8, 4);
+		glVertex3i(3, 9, 4);
+		glVertex3i(3, 9, 5);
+	glEnd();
+
+	glTranslated(0, -0.001, 0);
+	glBegin(GL_QUADS); // lateral esquerdo
+		glColor3f(0.1f, 0.1f, 0.1f);
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(2, 0, 11); 
+		glVertex3i(1, 0, 11);
+		glVertex3i(1, 0, 9);
+		glVertex3i(2, 0, 9);
+	glEnd();
+
+	glTranslated(0, 0.01, 0);
+	glBegin(GL_QUADS); // lateral direito
+		glColor3f(0.1f, 0.1f, 0.1f);
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(2, 10, 11); 
+		glVertex3i(1, 10, 11);
+		glVertex3i(1, 10, 9);
+		glVertex3i(2, 10, 9);
+	glEnd();
+}
+
+void drawCargoCover()
+{
+	glColor3f(0.7f, 0.0f, 0.0f);
+	glTranslated(0, 0, 0.001);
+	glBegin(GL_QUADS);
+		glNormal3f(0.f, 1.f, 0.f);
+		glVertex3i(0, 2, 15);
+		glVertex3i(0, 8, 15);
+		glVertex3i(1, 8, 15);
+		glVertex3i(1, 2, 15);
+	glEnd();
+
+	glTranslated(-0.01,0, 0);
+		glBegin(GL_QUADS);
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(0, 2, 15);
+		glVertex3i(0, 8, 15);
+		glVertex3i(0, 8, 12);
+		glVertex3i(0, 2, 12);
+	glEnd();
 }
 
 void drawVideoGame()
@@ -147,15 +213,19 @@ void drawVideoGame()
 	drawBodyVideoGame();
 	drawDisplayVideoGame();
 	drawButtonsVideoGame();
+	drawCargoCover();
 }
 
-void draw()
+void display()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0.0f, 0.0f, 0.0f);
 
 	drawBox();
+	glPushMatrix();
+	glRotatef(angle, 0, 0, 1);
 	drawVideoGame();
+	glPopMatrix();
 	glFlush();
 }
 
@@ -169,15 +239,19 @@ void subMenuResolution(int option)
 
 		case 1:
 			glutFullScreen();
+			glutPostRedisplay();
 			break;
 		case 2:
 			glutReshapeWindow(640, 480);
+			glutPostRedisplay();
 			break;
 		case 3:
 			glutReshapeWindow(1280, 750);
+			glutPostRedisplay();
 			break;
 		case 4:
 			glutReshapeWindow(1920, 1080);
+			glutPostRedisplay();
 			break;
 	}
 
@@ -241,53 +315,6 @@ void menuPopUp()
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
-// Teclado e Mouse
-//-------------------------------------------------------------------------------------
-
-void keyboard(unsigned char key, int x, int y)
-{
-	switch (key)
-	{
-		case '1':
-			if (op0 == 1) {
-				glDisable(GL_LIGHT0);
-				op0 = 0;
-			}
-			else
-			{
-				glEnable(GL_LIGHT0);
-				op0 = 1;
-			}
-
-			glutPostRedisplay();
-			break;
-
-		case '2':
-			if (op == 1) {
-				glDisable(GL_LIGHTING);
-				op = 0;
-			}
-			else
-			{
-				glEnable(GL_LIGHTING);
-				op = 1;
-			}
-
-			glutPostRedisplay();
-			break;
-	}
-}
-
-void specialKeys(int key, int x, int y)
-{
-
-}
-
-void mouse(int button, int state, int x, int y)
-{
-	// Ao clicar com o botão direito, mudar a cor da letra no display
-}
-
 // Init e Reshape
 //-------------------------------------------------------------------------------------
 
@@ -316,6 +343,8 @@ void init()
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_DEPTH);
+
+	glutFullScreen();
 }
 
 void reshape(int w, int h)
@@ -331,6 +360,72 @@ void reshape(int w, int h)
 	gluLookAt(cam.obsX, cam.obsY, cam.obsZ, 0, 0, 0, 0, 0, 1);
 }
 
+// Teclado e Mouse
+//-------------------------------------------------------------------------------------
+
+void keyboard(unsigned char key, int x, int y)
+{
+	switch (key)
+	{
+		case 27: 
+			exit(0);
+			break;
+		case '1':
+			if (op0 == 1) {
+				glDisable(GL_LIGHT0);
+				op0 = 0;
+			}
+			else {
+				glEnable(GL_LIGHT0);
+				op0 = 1;
+			}
+
+			glutPostRedisplay();
+			break;
+
+		case '2':
+			if (op == 1) {
+				glDisable(GL_LIGHTING);
+				op = 0;
+			}
+			else {
+				glEnable(GL_LIGHTING);
+				op = 1;
+			}
+
+			glutPostRedisplay();
+			break;
+	}
+}
+
+void specialKeys(int key, int x, int y)
+{
+	switch (key)
+	{
+		case GLUT_KEY_RIGHT:
+			angle += 1.0f;
+
+			if (angle >= 360.0f)
+				angle = 1.0f;
+			glutPostRedisplay();
+			break;
+		case GLUT_KEY_LEFT:
+			angle -= 1.f;
+
+			if (angle <= -360.0f)
+				angle = 1.f;
+			glutPostRedisplay();
+			break;
+	}
+}
+
+void mouse(int button, int state, int x, int y)
+{
+
+}
+
+
+// Função Principal
 //-------------------------------------------------------------------------------------
 
 int main(int argc, char** argv)
@@ -342,7 +437,7 @@ int main(int argc, char** argv)
 	glutCreateWindow("Video-Game-3D");
 	init();
 	initializeCam();
-	glutDisplayFunc(draw);
+	glutDisplayFunc(display);
 	menuPopUp();
 	glutKeyboardFunc(keyboard);
 	glutSpecialFunc(specialKeys);
