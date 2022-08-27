@@ -25,6 +25,8 @@ void initializeCam()
 	cam.obsY = -10;
 	cam.obsZ = 18;
 }
+
+// objetos 3D
 //--------------------------------------------------------------------------------------
 void drawBox()
 {
@@ -39,64 +41,63 @@ void drawDisplayVideoGame()
 {
 	glTranslated(0.001, 0, 0);
 	glBegin(GL_QUADS);
-	glNormal3f(0.f, 0.f, 1.f);
-	glColor3f(0.5f, 0.5f, 0.5f);
-	glVertex3i(3, 1, 14);
-	glVertex3i(3, 9, 14);
-	glVertex3i(3, 9, 8);
-	glVertex3i(3, 1, 8);
-	glEnd();
+		glNormal3f(0.f, 0.f, 1.f);
+		glColor3f(0.5f, 0.5f, 0.5f);
+		glVertex3i(3, 1, 14);
+		glVertex3i(3, 9, 14);
+		glVertex3i(3, 9, 8);
+		glVertex3i(3, 1, 8);
+		glEnd();
 
-	glTranslated(0.002, 0, 0);
-	glBegin(GL_QUADS);
-	glColor3f(0.5f, 0.5f, 0.1f);
-	glVertex3i(3, 8, 13);
-	glVertex3i(3, 8, 9);
-	glVertex3i(3, 2, 9);
-	glVertex3i(3, 2, 13);
-
+		glTranslated(0.002, 0, 0);
+		glBegin(GL_QUADS);
+		glColor3f(0.5f, 0.5f, 0.1f);
+		glVertex3i(3, 8, 13);
+		glVertex3i(3, 8, 9);
+		glVertex3i(3, 2, 9);
+		glVertex3i(3, 2, 13);
 	glEnd();
 }
 
 void drawBodyVideoGame()
 {
 	glBegin(GL_QUADS);
-	glColor3f(0.9f, 0.9f, 0.9f);
-	glNormal3f(0.f, 0.f, -1.f);
-	glVertex3i(0, 0, 15);  //Front
-	glVertex3i(0, 10, 15);
-	glVertex3i(0, 10, 0);
-	glVertex3i(0, 0, 0);
+		glColor3f(0.9f, 0.9f, 0.9f);
+		glNormal3f(0.f, 0.f, -1.f);
+		glVertex3i(0, 0, 15);  //Front
+		glVertex3i(0, 10, 15);
+		glVertex3i(0, 10, 0);
+		glVertex3i(0, 0, 0);
 
-	glNormal3f(0.f, 0.f, 1.f);
-	glVertex3i(3, 0, 15);//back
-	glVertex3i(3, 10, 15);
-	glVertex3i(3, 10, 0);
-	glVertex3i(3, 0, 0);
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(3, 0, 15);//back
+		glVertex3i(3, 10, 15);
+		glVertex3i(3, 10, 0);
+		glVertex3i(3, 0, 0);
 
-	glNormal3f(0.f, 1.f, 0.f);
-	glVertex3i(0, 0, 0); //Top
-	glVertex3i(3, 0, 0);
-	glVertex3i(3, 0, 15);
-	glVertex3i(0, 0, 15);
+		glNormal3f(0.f, 1.f, 0.f);
+		glVertex3i(0, 0, 0); //Top
+		glVertex3i(3, 0, 0);
+		glVertex3i(3, 0, 15);
+		glVertex3i(0, 0, 15);
 
-	glNormal3f(0.f, -1.f, 0.f);
-	glVertex3i(0, 10, 0); //Botton
-	glVertex3i(3, 10, 0);
-	glVertex3i(3, 10, 15);
-	glVertex3i(0, 10, 15);
+		glNormal3f(0.f, -1.f, 0.f);
+		glVertex3i(0, 10, 0); //Botton
+		glVertex3i(3, 10, 0);
+		glVertex3i(3, 10, 15);
+		glVertex3i(0, 10, 15);
 
-	glNormal3f(-1.f, 0.f, 0.f);
-	glVertex3i(0, 0, 0); //left
-	glVertex3i(3, 0, 0);
-	glVertex3i(3, 10, 0);
-	glVertex3i(0, 10, 0);
+		glNormal3f(-1.f, 0.f, 0.f);
+		glVertex3i(0, 0, 0); //left
+		glVertex3i(3, 0, 0);
+		glVertex3i(3, 10, 0);
+		glVertex3i(0, 10, 0);
 
-	glNormal3f(1.f, 0.f, 0.f);
-	glVertex3i(0, 10, 15); //right
-	glVertex3i(0, 0, 15);
-	glVertex3i(3, 0, 15);
-	glVertex3i(3, 10, 15);
+		glNormal3f(1.f, 0.f, 0.f);
+		glVertex3i(0, 10, 15); //right
+		glVertex3i(0, 0, 15);
+		glVertex3i(3, 0, 15);
+		glVertex3i(3, 10, 15);
 	glEnd();
 }
 
@@ -104,39 +105,39 @@ void drawButtonsVideoGame()
 {
 	glTranslated(0.001, 0, 0);
 	glBegin(GL_QUADS);
-	glNormal3f(0.f, 0.f, 1.f);
-	glColor3f(0.1f, 0.1f, 0.1f);
-	glVertex3i(3, 2, 6); // bot�o de cruz
-	glVertex3i(3, 2, 5);
-	glVertex3i(3, 3, 5);
-	glVertex3i(3, 3, 6);
-	glVertex3i(3, 1, 5);
-	glVertex3i(3, 1, 4);
-	glVertex3i(3, 4, 4);
-	glVertex3i(3, 4, 5);
-	glVertex3i(3, 2, 4);
-	glVertex3i(3, 2, 3);
-	glVertex3i(3, 3, 3);
-	glVertex3i(3, 3, 4);
+		glNormal3f(0.f, 0.f, 1.f);
+		glColor3f(0.1f, 0.1f, 0.1f);
+		glVertex3i(3, 2, 6); // botão de cruz
+		glVertex3i(3, 2, 5);
+		glVertex3i(3, 3, 5);
+		glVertex3i(3, 3, 6);
+		glVertex3i(3, 1, 5);
+		glVertex3i(3, 1, 4);
+		glVertex3i(3, 4, 4);
+		glVertex3i(3, 4, 5);
+		glVertex3i(3, 2, 4);
+		glVertex3i(3, 2, 3);
+		glVertex3i(3, 3, 3);
+		glVertex3i(3, 3, 4);
 	glEnd();
 
 	glBegin(GL_QUADS);
-	glColor3f(0.1f, 0.1f, 0.1f);
-	glNormal3f(0.f, 0.f, 1.f);
-	glVertex3i(3, 2, 6);
-	glVertex3i(3, 2, 5);
-	glVertex3i(3, 3, 5);
-	glVertex3i(3, 3, 6);
+		glColor3f(0.1f, 0.1f, 0.1f);
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(3, 2, 6);
+		glVertex3i(3, 2, 5);
+		glVertex3i(3, 3, 5);
+		glVertex3i(3, 3, 6);
 
-	glVertex3i(3, 1, 5);
-	glVertex3i(3, 1, 4);
-	glVertex3i(3, 4, 4);
-	glVertex3i(3, 4, 5);
+		glVertex3i(3, 1, 5);
+		glVertex3i(3, 1, 4);
+		glVertex3i(3, 4, 4);
+		glVertex3i(3, 4, 5);
 
-	glVertex3i(3, 2, 4);
-	glVertex3i(3, 2, 3);
-	glVertex3i(3, 3, 3);
-	glVertex3i(3, 3, 4);
+		glVertex3i(3, 2, 4);
+		glVertex3i(3, 2, 3);
+		glVertex3i(3, 3, 3);
+		glVertex3i(3, 3, 4);
 	glEnd();
 
 }
@@ -158,6 +159,7 @@ void draw()
 	glFlush();
 }
 
+// Menu PopUp
 //--------------------------------------------------------------------------------------
 
 void subMenuResolution(int option)
@@ -165,22 +167,18 @@ void subMenuResolution(int option)
 	switch (option)
 	{
 
-	case 1:
-		cout << "Full Scren Ativo" << endl;
-		glutFullScreen();
-		break;
-	case 2:
-		cout << "Resolucao alterada para 640 x 480(SD)" << endl;
-		glutReshapeWindow(640, 480);
-		break;
-	case 3:
-		cout << "Resolucao alterada para 1280 x 720(HD)" << endl;
-		glutReshapeWindow(1280, 750);
-		break;
-	case 4:
-		cout << "Resolucao alterada para 1920 x 1080(FHD)" << endl;
-		glutReshapeWindow(1920, 1080);
-		break;
+		case 1:
+			glutFullScreen();
+			break;
+		case 2:
+			glutReshapeWindow(640, 480);
+			break;
+		case 3:
+			glutReshapeWindow(1280, 750);
+			break;
+		case 4:
+			glutReshapeWindow(1920, 1080);
+			break;
 	}
 
 }
@@ -191,16 +189,16 @@ void subMenuChangeSetence(int option)
 	{
 
 		case 1:
-			cout << "Frase do Display alterada para \"Ola Mundo\"" << endl;
+			//cout << "Frase do Display alterada para \"Ola Mundo\"" << endl;
 			break;
 		case 2:
-			cout << "Frase do Display alterada para \"hello World\"" << endl;
+			//cout << "Frase do Display alterada para \"hello World\"" << endl;
 			break;
 		case 3:
-			cout << "Frase do Display alterada para \"Computação Grafica\"" << endl;
+			//cout << "Frase do Display alterada para \"Computação Grafica\"" << endl;
 			break;
 		case 4:
-			cout << "Frase do Display alterada para \"GAC104\"" << endl;
+			//cout << "Frase do Display alterada para \"GAC104\"" << endl;
 			break;
 	}
 
@@ -243,43 +241,38 @@ void menuPopUp()
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
+// Teclado e Mouse
 //-------------------------------------------------------------------------------------
 
 void keyboard(unsigned char key, int x, int y)
 {
 	switch (key)
 	{
-		case 27:
-			exit(0);
-			break;
-
 		case '1':
 			if (op0 == 1) {
-				cout << "Luz 0 Desativada" << endl;
 				glDisable(GL_LIGHT0);
 				op0 = 0;
 			}
 			else
 			{
-				cout << "Luz 0 Ativada" << endl;
 				glEnable(GL_LIGHT0);
 				op0 = 1;
 			}
+
 			glutPostRedisplay();
 			break;
 
 		case '2':
 			if (op == 1) {
-				cout << "Iluminação Desativada" << endl;
 				glDisable(GL_LIGHTING);
 				op = 0;
 			}
 			else
 			{
-				cout << "Iluminação Ativada" << endl;
 				glEnable(GL_LIGHTING);
 				op = 1;
 			}
+
 			glutPostRedisplay();
 			break;
 	}
@@ -295,6 +288,7 @@ void mouse(int button, int state, int x, int y)
 	// Ao clicar com o botão direito, mudar a cor da letra no display
 }
 
+// Init e Reshape
 //-------------------------------------------------------------------------------------
 
 void init()
@@ -309,7 +303,7 @@ void init()
 		{ 0.3f, 0.3f, 0.3f, 1.0f }, // ambiente
 		{ 0.3f, 0.3f, 0.3f, 1.0f }, // Difusa
 		{ 0.1f, 0.1f, 0.1f, 0.0f }, // specular 
-		{ 0.0, 200.0f, 0.0, 0.0f } };// posi��o0
+		{ 0.0, 200.0f, 0.0, 0.0f }};// positon
 
 	glLightfv(GL_LIGHT0, GL_AMBIENT, &light0[0][0]);
 	glLightfv(GL_LIGHT0, GL_DIFFUSE, &light0[1][0]);
