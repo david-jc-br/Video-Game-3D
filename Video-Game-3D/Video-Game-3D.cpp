@@ -6,6 +6,10 @@
 
 using namespace std;
 
+int w = 1920, h = 1080;
+
+GLfloat angle = 0;
+
 #define	checkImageWidth 8
 #define	checkImageHeight 8
 static GLubyte checkImage[checkImageHeight][checkImageWidth][6];
@@ -13,28 +17,6 @@ static GLubyte checkImage[checkImageHeight][checkImageWidth][6];
 #ifdef GL_VERSION_1_1
 static GLuint texName;
 #endif
-
-int w = 1920, h = 1080;
-short op = 1, op0 = 1;
-
-GLfloat angle = 0;
-
-struct observer
-{
-	GLdouble obsX;
-	GLdouble obsY;
-	GLdouble obsZ;
-};
-
-observer cam;
-
-void initializeCam()
-{
-	// Inicia valores do observador 
-	cam.obsX = 25;
-	cam.obsY = -10;
-	cam.obsZ = 22;
-}
 
 void makeCheckImage(void)
 {
@@ -50,6 +32,7 @@ void makeCheckImage(void)
 		}
 	}
 }
+
 // objetos 3D
 //--------------------------------------------------------------------------------------
 void drawBox()
@@ -312,6 +295,36 @@ void subMenuChangeSetence(int option)
 
 }
 
+void subMenuLight0(int option)
+{
+	switch (option)
+	{
+		case 1:
+			glEnable(GL_LIGHT0);
+			glutPostRedisplay();
+			break;
+		case 2:
+			glDisable(GL_LIGHT0);
+			glutPostRedisplay();
+			break;
+	}
+}
+
+void subMenuLighting(int option)
+{
+	switch (option)
+	{
+	case 1:
+		glEnable(GL_LIGHTING);
+		glutPostRedisplay();
+		break;
+	case 2:
+		glDisable(GL_LIGHTING);
+		glutPostRedisplay();
+		break;
+	}
+}
+
 void menuPrincipal(int option)
 {
 	switch (option)
@@ -324,7 +337,7 @@ void menuPrincipal(int option)
 
 void menuPopUp()
 {
-	int sMenuResolution, sMenuChangeSetence;
+	int sMenuResolution, sMenuChangeSetence, sMenuLight0, sMenuLighting;
 
 	sMenuResolution = glutCreateMenu(subMenuResolution);
 
@@ -340,10 +353,22 @@ void menuPopUp()
 	glutAddMenuEntry("Computação Gráfica", 3);
 	glutAddMenuEntry("GAC104", 4);
 
+	sMenuLight0 = glutCreateMenu(subMenuLight0);
+
+	glutAddMenuEntry("Ativar", 1);
+	glutAddMenuEntry("Desativar", 2);
+
+	sMenuLighting = glutCreateMenu(subMenuLighting);
+
+	glutAddMenuEntry("Ativar", 1);
+	glutAddMenuEntry("Desativar", 2);
+
 	glutCreateMenu(menuPrincipal);
 
 	glutAddSubMenu("Alterar Resolução", sMenuResolution);
 	glutAddSubMenu("Alterar frase do Display", sMenuChangeSetence);
+	glutAddSubMenu("Luz 0", sMenuLight0);
+	glutAddSubMenu("Iluminação", sMenuLighting);
 	glutAddMenuEntry("Sair", 0);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -412,7 +437,7 @@ void reshape(int w, int h)
 	gluPerspective(60, aspect, 0.5, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(cam.obsX, cam.obsY, cam.obsZ, 0, 0, 0, 0, 0, 1);
+	gluLookAt(25, -10, 22, 0, 0, 0, 0, 0, 1);
 }
 
 // Teclado e Mouse
@@ -424,31 +449,6 @@ void keyboard(unsigned char key, int x, int y)
 	{
 		case 27: 
 			exit(0);
-			break;
-		case '1':
-			if (op0 == 1) {
-				glDisable(GL_LIGHT0);
-				op0 = 0;
-			}
-			else {
-				glEnable(GL_LIGHT0);
-				op0 = 1;
-			}
-
-			glutPostRedisplay();
-			break;
-
-		case '2':
-			if (op == 1) {
-				glDisable(GL_LIGHTING);
-				op = 0;
-			}
-			else {
-				glEnable(GL_LIGHTING);
-				op = 1;
-			}
-
-			glutPostRedisplay();
 			break;
 	}
 }
@@ -490,7 +490,6 @@ int main(int argc, char** argv)
 	glutInitWindowSize(w, h);
 	glutCreateWindow("Video-Game-3D");
 	init();
-	initializeCam();
 	glutDisplayFunc(display);
 	menuPopUp();
 	glutKeyboardFunc(keyboard);
