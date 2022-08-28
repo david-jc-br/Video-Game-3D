@@ -1,8 +1,18 @@
 ﻿#include <GL/glut.h>
 #include <GL/gl.h>
 #include <iostream>
+#include <stdlib.h>
+#include <stdio.h>
 
 using namespace std;
+
+#define	checkImageWidth 8
+#define	checkImageHeight 8
+static GLubyte checkImage[checkImageHeight][checkImageWidth][6];
+
+#ifdef GL_VERSION_1_1
+static GLuint texName;
+#endif
 
 int w = 1920, h = 1080;
 short op = 1, op0 = 1;
@@ -26,13 +36,28 @@ void initializeCam()
 	cam.obsZ = 22;
 }
 
+
+void makeCheckImage(void)
+{
+	int i, j, c;
+
+	for (i = 0; i < checkImageHeight; i++) {
+		for (j = 0; j < checkImageWidth; j++) {
+			c = ((((i & 0x8) == 0) ^ ((j & 0x8)) == 0)) * 255;
+			checkImage[i][j][0] = (GLubyte)c;
+			checkImage[i][j][1] = (GLubyte)c;
+			checkImage[i][j][2] = (GLubyte)c;
+			checkImage[i][j][3] = (GLubyte)255;
+		}
+	}
+}
 // objetos 3D
 //--------------------------------------------------------------------------------------
 void drawBox()
 {
 	glPushMatrix();
 	glColor3f(0.1f, 0.5f, 0.6f);
-	glTranslated(0, 0, 50);
+	glTranslated(0, 0, 49);
 	glutSolidCube(100);
 	glPopMatrix();
 }
@@ -61,16 +86,26 @@ void drawDisplayVideoGame()
 
 void drawBodyVideoGame()
 {
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+#ifdef GL_VERSION_1_1
+	glBindTexture(GL_TEXTURE_2D, texName);
+#endif
+
+	glBegin(GL_QUADS);
+		glColor3f(0.5f, 0.5f, 0.5f);
+		glTexCoord2f(0.0, 0.0);glVertex3i(0, 0, 15); //Back
+		glTexCoord2f(0.0, 1.0);glVertex3i(0, 10, 15);
+		glTexCoord2f(1.0, 1.0);glVertex3i(0, 10, 0);
+		glTexCoord2f(1.0, 0.0);glVertex3i(0, 0, 0);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
+
 	glBegin(GL_QUADS);
 		glColor3f(0.8f, 0.8f, 0.8f);
 		glNormal3f(0.f, 0.f, -1.f);
-		glVertex3i(0, 0, 15);  //Front
-		glVertex3i(0, 10, 15);
-		glVertex3i(0, 10, 0);
-		glVertex3i(0, 0, 0);
-
 		glNormal3f(0.f, 0.f, 1.f);
-		glVertex3i(3, 0, 15);//back
+		glVertex3i(3, 0, 15);//front
 		glVertex3i(3, 10, 15);
 		glVertex3i(3, 10, 0);
 		glVertex3i(3, 0, 0);
@@ -343,6 +378,27 @@ void init()
 
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_DEPTH);
+	glShadeModel(GL_FLAT);
+
+	makeCheckImage();
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+
+#ifdef GL_VERSION_1_1
+	glGenTextures(1, &texName);
+	glBindTexture(GL_TEXTURE_2D, texName);
+#endif
+
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+#ifdef GL_VERSION_1_1
+	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, checkImageHeight,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+#else
+	glTexImage2D(GL_TEXTURE_2D, 0, 4, checkImageWidth, checkImageHeight,
+		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+#endif
 
 	glutFullScreen();
 }
@@ -403,17 +459,17 @@ void specialKeys(int key, int x, int y)
 	switch (key)
 	{
 		case GLUT_KEY_RIGHT:
-			angle += 1.0f;
+			angle += 5.0f;
 
 			if (angle >= 360.0f)
-				angle = 1.0f;
+				angle = 5.0f;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_LEFT:
-			angle -= 1.f;
+			angle -= 5.f;
 
 			if (angle <= -360.0f)
-				angle = 1.f;
+				angle = 5.f;
 			glutPostRedisplay();
 			break;
 	}
@@ -424,14 +480,13 @@ void mouse(int button, int state, int x, int y)
 
 }
 
-
 // Função Principal
 //-------------------------------------------------------------------------------------
 
 int main(int argc, char** argv)
 {
 	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB);
+	glutInitDisplayMode(GLUT_SINGLE | GLUT_RGB | GLUT_DEPTH);
 	glutInitWindowPosition(0, 0);
 	glutInitWindowSize(w, h);
 	glutCreateWindow("Video-Game-3D");
