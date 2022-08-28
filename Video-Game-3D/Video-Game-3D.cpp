@@ -8,11 +8,15 @@ using namespace std;
 
 int w = 1920, h = 1080;
 
-GLfloat angle = 0;
+GLfloat R = 0.0f, G = 0.0f, B = 0.0f;
+
+string action = "up";
+
+GLfloat angulo = 15, height = 0;
 
 #define	checkImageWidth 8
-#define	checkImageHeight 8
-static GLubyte checkImage[checkImageHeight][checkImageWidth][6];
+#define	checkImageHeight 16
+static GLubyte checkImage[checkImageHeight][checkImageWidth][8];
 
 #ifdef GL_VERSION_1_1
 static GLuint texName;
@@ -49,20 +53,11 @@ void drawDisplayVideoGame()
 	glTranslated(0.001, 0, 0);
 	glBegin(GL_QUADS);
 		glNormal3f(0.f, 0.f, 1.f);
-		glColor3f(0.5f, 0.5f, 0.5f);
+		glColor3f(R, G, B);
 		glVertex3i(3, 1, 14);
 		glVertex3i(3, 9, 14);
-		glVertex3i(3, 9, 8);
-		glVertex3i(3, 1, 8);
-		glEnd();
-
-		glTranslated(0.002, 0, 0);
-		glBegin(GL_QUADS);
-		glColor3f(0.5f, 0.5f, 0.1f);
-		glVertex3i(3, 8, 13);
-		glVertex3i(3, 8, 9);
-		glVertex3i(3, 2, 9);
-		glVertex3i(3, 2, 13);
+		glVertex3i(3, 9, 6);
+		glVertex3i(3, 1, 6);
 	glEnd();
 }
 
@@ -75,46 +70,46 @@ void drawBodyVideoGame()
 #endif
 
 	glBegin(GL_QUADS);
-		glColor3f(0.8f, 0.8f, 0.8f);
-		glTexCoord2f(0.0, 0.0);glVertex3i(0, 0, 15); //Back
-		glTexCoord2f(0.0, 1.0);glVertex3i(0, 10, 15);
-		glTexCoord2f(1.0, 1.0);glVertex3i(0, 10, 0);
-		glTexCoord2f(1.0, 0.0);glVertex3i(0, 0, 0);
+		glColor3f(0.8f,0.8f,0.8f);
+		glTexCoord2f(0.0, 0.0);glVertex3i(0, 10, 15); // top
+		glTexCoord2f(0.0, 1.0);glVertex3i(0, 0, 15);
+		glTexCoord2f(1.0, 1.0);glVertex3i(3, 0, 15);
+		glTexCoord2f(1.0, 0.0);glVertex3i(3, 10, 15);
 	glEnd();
 	glDisable(GL_TEXTURE_2D);
 
 	glBegin(GL_QUADS);
 		glColor3f(0.8f, 0.8f, 0.8f);
 		glNormal3f(0.f, 0.f, -1.f);
-		glNormal3f(0.f, 0.f, 1.f);
 		glVertex3i(3, 0, 15);//front
 		glVertex3i(3, 10, 15);
 		glVertex3i(3, 10, 0);
 		glVertex3i(3, 0, 0);
 
 		glNormal3f(0.f, 1.f, 0.f);
-		glVertex3i(0, 0, 0); //Top
+		glVertex3i(0, 0, 0); // left
 		glVertex3i(3, 0, 0);
 		glVertex3i(3, 0, 15);
 		glVertex3i(0, 0, 15);
 
 		glNormal3f(0.f, -1.f, 0.f);
-		glVertex3i(0, 10, 0); //Botton
+		glVertex3i(0, 10, 0); // right
 		glVertex3i(3, 10, 0);
 		glVertex3i(3, 10, 15);
 		glVertex3i(0, 10, 15);
 
 		glNormal3f(-1.f, 0.f, 0.f);
-		glVertex3i(0, 0, 0); //left
+		glVertex3i(0, 0, 0); // botton
 		glVertex3i(3, 0, 0);
 		glVertex3i(3, 10, 0);
 		glVertex3i(0, 10, 0);
 
-		glNormal3f(1.f, 0.f, 0.f);
-		glVertex3i(0, 10, 15); //right
-		glVertex3i(0, 0, 15);
-		glVertex3i(3, 0, 15);
-		glVertex3i(3, 10, 15);
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(0, 0, 15); //Back
+		glVertex3i(0, 10, 15);
+		glVertex3i(0, 10, 0);
+		glVertex3i(0, 0, 0);
+		
 	glEnd();
 }
 
@@ -124,37 +119,37 @@ void drawButtonsVideoGame()
 	glBegin(GL_QUADS);
 		glNormal3f(0.f, 0.f, 1.f);
 		glColor3f(0.1f, 0.1f, 0.1f);
-		glVertex3i(3, 2, 6); // botão de cruz
-		glVertex3i(3, 2, 5);
-		glVertex3i(3, 3, 5);
-		glVertex3i(3, 3, 6);
-		glVertex3i(3, 1, 5);
-		glVertex3i(3, 1, 4);
-		glVertex3i(3, 4, 4);
-		glVertex3i(3, 4, 5);
+		glVertex3i(3, 2, 5); // botão de cruz
 		glVertex3i(3, 2, 4);
-		glVertex3i(3, 2, 3);
-		glVertex3i(3, 3, 3);
 		glVertex3i(3, 3, 4);
+		glVertex3i(3, 3, 5);
+		glVertex3i(3, 1, 4);
+		glVertex3i(3, 1, 3);
+		glVertex3i(3, 4, 3);
+		glVertex3i(3, 4, 4);
+		glVertex3i(3, 2, 3);
+		glVertex3i(3, 2, 2);
+		glVertex3i(3, 3, 2);
+		glVertex3i(3, 3, 3);
 	glEnd();
 
 	glBegin(GL_QUADS);
 		glColor3f(0.1f, 0.1f, 0.1f); // botão cruz
 		glNormal3f(0.f, 0.f, 1.f);
-		glVertex3i(3, 2, 6);
 		glVertex3i(3, 2, 5);
-		glVertex3i(3, 3, 5);
-		glVertex3i(3, 3, 6);
-
-		glVertex3i(3, 1, 5);
-		glVertex3i(3, 1, 4);
-		glVertex3i(3, 4, 4);
-		glVertex3i(3, 4, 5);
-
 		glVertex3i(3, 2, 4);
-		glVertex3i(3, 2, 3);
-		glVertex3i(3, 3, 3);
 		glVertex3i(3, 3, 4);
+		glVertex3i(3, 3, 5);
+
+		glVertex3i(3, 1, 4);
+		glVertex3i(3, 1, 3);
+		glVertex3i(3, 4, 3);
+		glVertex3i(3, 4, 4);
+
+		glVertex3i(3, 2, 3);
+		glVertex3i(3, 2, 2);
+		glVertex3i(3, 3, 2);
+		glVertex3i(3, 3, 3);
 	glEnd();
 		
 	glBegin(GL_QUADS); // botões quadrados
@@ -240,7 +235,8 @@ void display()
 
 	drawBox();
 	glPushMatrix();
-	glRotatef(angle, 0, 0, 1);
+	glRotatef(angulo, 0, 0, 1);
+	glTranslatef(6, -12, height);
 	drawVideoGame();
 	glPopMatrix();
 	glFlush();
@@ -374,6 +370,45 @@ void menuPopUp()
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
 }
 
+// Animações
+//--------------------------------------------------------------------------------------
+
+void animationVideoGame(int value = 1)
+{
+	
+	if (action == "up")
+		height += 0.15;
+	else 
+		height -= 0.15;
+
+	if (height > 7)
+	{
+		height = 7;
+		action = "down";
+	}
+
+	if (height < 0)
+	{
+		height = 0.0f;
+		action = "up";
+	}
+
+	glutPostRedisplay();
+
+	glutTimerFunc(30, animationVideoGame, value);
+}
+
+void animationDisplayVideoGame(int value = 1)
+{
+		R = rand() % 2;
+		G = rand() % 2;
+		B = rand() % 2;
+
+		glutPostRedisplay();
+
+		glutTimerFunc(100, animationDisplayVideoGame, value);
+}
+
 // Init e Reshape
 //-------------------------------------------------------------------------------------
 
@@ -425,6 +460,8 @@ void init()
 #endif
 
 	glutFullScreen();
+	animationVideoGame();
+	animationDisplayVideoGame();
 }
 
 void reshape(int w, int h)
@@ -437,7 +474,7 @@ void reshape(int w, int h)
 	gluPerspective(60, aspect, 0.5, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(25, -10, 22, 0, 0, 0, 0, 0, 1);
+	gluLookAt(30, -10, 25, 0, 0, 0, 0, 0, 1);
 }
 
 // Teclado e Mouse
@@ -458,17 +495,17 @@ void specialKeys(int key, int x, int y)
 	switch (key)
 	{
 		case GLUT_KEY_RIGHT:
-			angle += 5.0f;
+			angulo += 5.0f;
 
-			if (angle >= 360.0f)
-				angle = 5.0f;
+			if (angulo >= 360.0f)
+				angulo = 0.0f;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_LEFT:
-			angle -= 5.f;
+			angulo -= 5.f;
 
-			if (angle <= -360.0f)
-				angle = 5.f;
+			if (angulo <= -360.0f)
+				angulo = 0.0f;
 			glutPostRedisplay();
 			break;
 	}
@@ -476,7 +513,17 @@ void specialKeys(int key, int x, int y)
 
 void mouse(int button, int state, int x, int y)
 {
-	// Ao clicar para a animação
+	
+	if (state == GLUT_LEFT_BUTTON)
+	{
+		glutPostRedisplay();
+	}
+
+	if (state == GLUT_UP)
+	{
+		glutPostRedisplay();
+	}
+
 }
 
 // Função Principal
