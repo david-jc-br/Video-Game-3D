@@ -36,7 +36,6 @@ void initializeCam()
 	cam.obsZ = 22;
 }
 
-
 void makeCheckImage(void)
 {
 	int i, j, c;
@@ -93,7 +92,7 @@ void drawBodyVideoGame()
 #endif
 
 	glBegin(GL_QUADS);
-		glColor3f(0.5f, 0.5f, 0.5f);
+		glColor3f(0.8f, 0.8f, 0.8f);
 		glTexCoord2f(0.0, 0.0);glVertex3i(0, 0, 15); //Back
 		glTexCoord2f(0.0, 1.0);glVertex3i(0, 10, 15);
 		glTexCoord2f(1.0, 1.0);glVertex3i(0, 10, 0);
@@ -477,7 +476,7 @@ void specialKeys(int key, int x, int y)
 
 void mouse(int button, int state, int x, int y)
 {
-
+	// Ao clicar para a animação
 }
 
 // Função Principal
