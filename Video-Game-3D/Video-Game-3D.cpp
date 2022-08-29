@@ -4,6 +4,9 @@
 
 using namespace std;
 
+// Variavéis Globais 
+//--------------------------------------------------------------------------------------
+
 int w = 1920, h = 1080; 
 
 GLfloat R = 0.0f, G = 0.0f, B = 0.0f; // RGB
@@ -16,6 +19,10 @@ GLfloat height = 0; // altura inicial da animãção
 
 bool animationState = TRUE; // Estado da animação de ativo ou desativado
 
+short colorVideoGame = 1, backgroundColor = 1; // Cor do video-game e do fundo
+
+// Definções da textura 
+//--------------------------------------------------------------------------------------
 #define	checkImageWidth 8
 #define	checkImageHeight 16
 static GLubyte checkImage[checkImageHeight][checkImageWidth][8];
@@ -43,8 +50,23 @@ void makeCheckImage(void)
 //--------------------------------------------------------------------------------------
 void drawBox()
 {
+	switch (backgroundColor)
+	{
+	case 1:
+		glColor3f(0.1f, 0.5f, 0.6f); // azul 
+		break;
+	case 2:
+		glColor3f(0.5f, 0.6f, 0.0f); // verde
+		break;
+	case 3:
+		glColor3f(0.4f, 0.3f, 0.1f); // marrom
+		break;
+	case 4:
+		glColor3f(0.6f, 0.2f, 0.2f); // vermelho
+		break;
+	}
+
 	glPushMatrix();
-	glColor3f(0.1f, 0.5f, 0.6f);
 	glTranslated(0, 0, 49);
 	glutSolidCube(100);
 	glPopMatrix();
@@ -65,23 +87,7 @@ void drawDisplayVideoGame()
 
 void drawBodyVideoGame()
 {
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-#ifdef GL_VERSION_1_1
-	glBindTexture(GL_TEXTURE_2D, texName);
-#endif
-
 	glBegin(GL_QUADS);
-		glColor3f(0.8f,0.8f,0.8f);
-		glTexCoord2f(0.0, 0.0);glVertex3i(0, 10, 15); // topo
-		glTexCoord2f(0.0, 1.0);glVertex3i(0, 0, 15);
-		glTexCoord2f(1.0, 1.0);glVertex3i(3, 0, 15);
-		glTexCoord2f(1.0, 0.0);glVertex3i(3, 10, 15);
-	glEnd();
-	glDisable(GL_TEXTURE_2D);
-
-	glBegin(GL_QUADS);
-		glColor3f(0.8f, 0.8f, 0.8f);
 		glNormal3f(0.f, 0.f, -1.f);
 		glVertex3i(3, 0, 15);// frente
 		glVertex3i(3, 10, 15);
@@ -113,6 +119,20 @@ void drawBodyVideoGame()
 		glVertex3i(0, 0, 0);
 		
 	glEnd();
+
+	glEnable(GL_TEXTURE_2D);
+	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+#ifdef GL_VERSION_1_1
+	glBindTexture(GL_TEXTURE_2D, texName);
+#endif
+
+	glBegin(GL_QUADS);
+		glTexCoord2f(0.0, 0.0);glVertex3i(0, 10, 15); // topo
+		glTexCoord2f(0.0, 1.0);glVertex3i(0, 0, 15);
+		glTexCoord2f(1.0, 1.0);glVertex3i(3, 0, 15);
+		glTexCoord2f(1.0, 0.0);glVertex3i(3, 10, 15);
+	glEnd();
+	glDisable(GL_TEXTURE_2D);
 }
 
 void drawButtonsVideoGame()
@@ -224,6 +244,23 @@ void drawCargoCover()
 
 void drawVideoGame()
 {
+
+	switch (colorVideoGame)
+	{
+		case 1:
+			glColor3f(0.8f, 0.8f, 0.8f); // cinza 
+			break;
+		case 2: 
+			glColor3f(0.4f, 0.9f, 0.3f); // verde
+			break;
+		case 3:
+			glColor3f(0.7f, 0.5f, 0.0f); // amarelo
+			break;
+		case 4:
+			glColor3f(0.7f, 0.3f, 0.7f); // roxo
+			break;
+	}
+
 	drawBodyVideoGame();
 	drawDisplayVideoGame();
 	drawButtonsVideoGame();
@@ -323,6 +360,52 @@ void subMenuLighting(int option)
 	}
 }
 
+void subMenuColorVideoGame(int option)
+{
+	switch (option)
+	{
+		case 1:
+			colorVideoGame = 1;
+			glutPostRedisplay();
+			break;
+		case 2:
+			colorVideoGame = 2;
+			glutPostRedisplay();
+			break;
+		case 3:
+			colorVideoGame = 3;
+			glutPostRedisplay();
+			break;
+		case 4:
+			colorVideoGame = 4;
+			glutPostRedisplay();
+			break;
+	}
+}
+
+void subMenuBackgroundColor(int option)
+{
+	switch (option)
+	{
+	case 1:
+		backgroundColor = 1;
+		glutPostRedisplay();
+		break;
+	case 2:
+		backgroundColor = 2;
+		glutPostRedisplay();
+		break;
+	case 3:
+		backgroundColor = 3;
+		glutPostRedisplay();
+		break;
+	case 4:
+		backgroundColor = 4;
+		glutPostRedisplay();
+		break;
+	}
+}
+
 void menuPrincipal(int option)
 {
 	switch (option)
@@ -335,7 +418,9 @@ void menuPrincipal(int option)
 
 void menuPopUp()
 {
-	int sMenuResolution, sMenuChangeSetence, sMenuLight0, sMenuLighting;
+	int sMenuResolution, sMenuChangeSetence,
+		sMenuLight0, sMenuLighting, sMenuColorVideoGame,
+		sMenuBackgroundColor;
 
 	sMenuResolution = glutCreateMenu(subMenuResolution);
 
@@ -361,10 +446,26 @@ void menuPopUp()
 	glutAddMenuEntry("Ativar", 1);
 	glutAddMenuEntry("Desativar", 2);
 
+	sMenuColorVideoGame = glutCreateMenu(subMenuColorVideoGame);
+
+	glutAddMenuEntry("Cinza", 1);
+	glutAddMenuEntry("Verde", 2);
+	glutAddMenuEntry("Amarelo", 3);
+	glutAddMenuEntry("Roxo", 4);
+
+	sMenuBackgroundColor = glutCreateMenu(subMenuBackgroundColor);
+
+	glutAddMenuEntry("Azul", 1);
+	glutAddMenuEntry("Verde", 2);
+	glutAddMenuEntry("Marrom", 3);
+	glutAddMenuEntry("Vermelho", 4);
+
 	glutCreateMenu(menuPrincipal);
 
-	glutAddSubMenu("Alterar Resolução", sMenuResolution);
-	glutAddSubMenu("Alterar frase do Display", sMenuChangeSetence);
+	glutAddSubMenu("Resolução", sMenuResolution);
+	glutAddSubMenu("frase do Display", sMenuChangeSetence);
+	glutAddSubMenu("Cor do Video-Game ", sMenuColorVideoGame);
+	glutAddSubMenu("Cor de Fundo ", sMenuBackgroundColor);
 	glutAddSubMenu("Luz 0", sMenuLight0);
 	glutAddSubMenu("Iluminação", sMenuLighting);
 	glutAddMenuEntry("Sair", 0);
@@ -380,9 +481,9 @@ void animationVideoGame(int value = 1)
 	if (animationState == TRUE)
 	{
 		if (action == "up")
-			height += 0.15;
+			height += 0.15f;
 		else 
-			height -= 0.15;
+			height -= 0.15f;
 		
 		if (height > 7)
 		{
@@ -527,7 +628,7 @@ void mouse(int button, int state, int x, int y)
 		glutPostRedisplay();
 	}
 
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) // 
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) // retorna a animaação
 	{
 		animationState = TRUE;
 		animationVideoGame();
