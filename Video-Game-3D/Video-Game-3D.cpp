@@ -4,13 +4,17 @@
 
 using namespace std;
 
-int w = 1920, h = 1080;
+int w = 1920, h = 1080; 
 
-GLfloat R = 0.0f, G = 0.0f, B = 0.0f;
+GLfloat R = 0.0f, G = 0.0f, B = 0.0f; // RGB
 
-string action = "up";
+string action = "up"; // ação da animação se é subir ou descer
 
-GLfloat angulo = 15, height = 0;
+GLfloat angle = 15; // angulo inicial da animação
+
+GLfloat height = 0; // altura inicial da animãção 
+
+bool animationState = TRUE; // Estado da animação de ativo ou desativado
 
 #define	checkImageWidth 8
 #define	checkImageHeight 16
@@ -69,7 +73,7 @@ void drawBodyVideoGame()
 
 	glBegin(GL_QUADS);
 		glColor3f(0.8f,0.8f,0.8f);
-		glTexCoord2f(0.0, 0.0);glVertex3i(0, 10, 15); // top
+		glTexCoord2f(0.0, 0.0);glVertex3i(0, 10, 15); // topo
 		glTexCoord2f(0.0, 1.0);glVertex3i(0, 0, 15);
 		glTexCoord2f(1.0, 1.0);glVertex3i(3, 0, 15);
 		glTexCoord2f(1.0, 0.0);glVertex3i(3, 10, 15);
@@ -79,31 +83,31 @@ void drawBodyVideoGame()
 	glBegin(GL_QUADS);
 		glColor3f(0.8f, 0.8f, 0.8f);
 		glNormal3f(0.f, 0.f, -1.f);
-		glVertex3i(3, 0, 15);//front
+		glVertex3i(3, 0, 15);// frente
 		glVertex3i(3, 10, 15);
 		glVertex3i(3, 10, 0);
 		glVertex3i(3, 0, 0);
 
 		glNormal3f(0.f, 1.f, 0.f);
-		glVertex3i(0, 0, 0); // left
+		glVertex3i(0, 0, 0); // lado esquerdo
 		glVertex3i(3, 0, 0);
 		glVertex3i(3, 0, 15);
 		glVertex3i(0, 0, 15);
 
 		glNormal3f(0.f, -1.f, 0.f);
-		glVertex3i(0, 10, 0); // right
+		glVertex3i(0, 10, 0); // lado direito
 		glVertex3i(3, 10, 0);
 		glVertex3i(3, 10, 15);
 		glVertex3i(0, 10, 15);
 
 		glNormal3f(-1.f, 0.f, 0.f);
-		glVertex3i(0, 0, 0); // botton
+		glVertex3i(0, 0, 0); // fundo
 		glVertex3i(3, 0, 0);
 		glVertex3i(3, 10, 0);
 		glVertex3i(0, 10, 0);
 
 		glNormal3f(0.f, 0.f, 1.f);
-		glVertex3i(0, 0, 15); //Back
+		glVertex3i(0, 0, 15); // trazeira
 		glVertex3i(0, 10, 15);
 		glVertex3i(0, 10, 0);
 		glVertex3i(0, 0, 0);
@@ -233,7 +237,7 @@ void display()
 
 	drawBox();
 	glPushMatrix();
-	glRotatef(angulo, 0, 0, 1);
+	glRotatef(angle, 0, 0, 1);
 	glTranslatef(6, -12, height);
 	drawVideoGame();
 	glPopMatrix();
@@ -373,31 +377,35 @@ void menuPopUp()
 
 void animationVideoGame(int value = 1)
 {
-	
-	if (action == "up")
-		height += 0.15;
-	else 
-		height -= 0.15;
-
-	if (height > 7)
+	if (animationState == TRUE)
 	{
-		height = 7;
-		action = "down";
+		if (action == "up")
+			height += 0.15;
+		else 
+			height -= 0.15;
+		
+		if (height > 7)
+		{
+			height = 7;
+			action = "down";
+		}
+
+		if (height < 0)
+		{
+			height = 0.0f;
+			action = "up";
+		}
+
+		glutPostRedisplay();
+
+		glutTimerFunc(30, animationVideoGame, value);
 	}
-
-	if (height < 0)
-	{
-		height = 0.0f;
-		action = "up";
-	}
-
-	glutPostRedisplay();
-
-	glutTimerFunc(30, animationVideoGame, value);
 }
 
 void animationDisplayVideoGame(int value = 1)
 {
+	if (animationState == TRUE)
+	{
 		R = rand() % 2;
 		G = rand() % 2;
 		B = rand() % 2;
@@ -405,6 +413,7 @@ void animationDisplayVideoGame(int value = 1)
 		glutPostRedisplay();
 
 		glutTimerFunc(100, animationDisplayVideoGame, value);
+	}
 }
 
 // Init e Reshape
@@ -493,17 +502,17 @@ void specialKeys(int key, int x, int y)
 	switch (key)
 	{
 		case GLUT_KEY_RIGHT:
-			angulo += 5.0f;
+			angle += 5.0f;
 
-			if (angulo >= 360.0f)
-				angulo = 0.0f;
+			if (angle >= 360.0f)
+				angle = 0.0f;
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_LEFT:
-			angulo -= 5.f;
+			angle -= 5.f;
 
-			if (angulo <= -360.0f)
-				angulo = 0.0f;
+			if (angle <= -360.0f)
+				angle = 0.0f;
 			glutPostRedisplay();
 			break;
 	}
@@ -512,16 +521,19 @@ void specialKeys(int key, int x, int y)
 void mouse(int button, int state, int x, int y)
 {
 	
-	if (state == GLUT_LEFT_BUTTON)
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) // pausa a animação
 	{
+		animationState = FALSE;
 		glutPostRedisplay();
 	}
 
-	if (state == GLUT_UP)
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) // 
 	{
+		animationState = TRUE;
+		animationVideoGame();
+		animationDisplayVideoGame();
 		glutPostRedisplay();
 	}
-
 }
 
 // Função Principal
