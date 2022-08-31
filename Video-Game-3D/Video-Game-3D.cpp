@@ -9,7 +9,7 @@ using namespace std;
 
 int w = 1920, h = 1080; 
 
-GLfloat R = 0.0f, G = 0.0f, B = 0.0f; // RGB
+GLfloat R = 0.0f, G = 0.0f, B = 0.0f; // RGB animação 
 
 string action = "up"; // ação da animação se é subir ou descer
 
@@ -17,7 +17,7 @@ GLfloat angle = 15; // angulo inicial da animação
 
 GLfloat height = 0; // altura inicial da animãção 
 
-bool animationState = TRUE; // Estado da animação de ativo ou desativado
+bool animationState = TRUE; // Estado da animação (se ativado ou desativado)
 
 short colorVideoGame = 1, backgroundColor = 1; // Cor do video-game e do fundo
 
@@ -67,9 +67,54 @@ void drawBox()
 	}
 
 	glPushMatrix();
-	glTranslated(0, 0, 49);
-	glutSolidCube(100);
+	glTranslated(0, 0, 42.5);
+	glutSolidCube(85);
 	glPopMatrix();
+}
+
+void drawBodyForklift()
+{
+	glColor3f(0.9f, 0.5f, 0.2f);
+	glPushMatrix();
+	glRotated(0, 0, 0, 0);
+	glTranslated(6, 6, 5);
+	glScaled(1,1,0.7);
+	glutSolidCube(9);
+	glPopMatrix();
+}
+
+void drawArmsForklift()
+{
+
+}
+
+void drawArrows()
+{
+	glBegin(GL_TRIANGLES); // x positivo
+		glColor3f(0.4f, 0.9f, 0.0f);
+		glNormal3f(0.f, 0.f, -1.f);
+		glVertex3i(42, -5, 15);
+		glVertex3i(42, 0, 20);
+		glVertex3i(42, 5, 15);
+
+		glColor3f(1.0f, 0.1f, 0.1f);
+		glVertex3i(42, -5, 14);
+		glVertex3i(42, 0, 9);
+		glVertex3i(42, 5, 14);
+	glEnd();
+
+	glBegin(GL_TRIANGLES); // x negativo
+		glColor3f(0.4f, 0.9f, 0.0f);
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(-42, -5, 15);
+		glVertex3i(-42, 0, 20);
+		glVertex3i(-42, 5, 15);
+
+		glColor3f(1.0f, 0.1f, 0.1f);
+		glVertex3i(-42, -5, 14);
+		glVertex3i(-42, 0, 9);
+		glVertex3i(-42, 5, 14);
+	glEnd();
 }
 
 void drawDisplayVideoGame()
@@ -272,11 +317,15 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0.0f, 0.0f, 0.0f);
 
-	drawBox();
+
 	glPushMatrix();
 	glRotatef(angle, 0, 0, 1);
+	drawBox();
+	drawArrows();
+	drawBodyForklift();
 	glTranslatef(6, -12, height);
 	drawVideoGame();
+	drawArmsForklift();
 	glPopMatrix();
 	glFlush();
 }
@@ -304,27 +353,6 @@ void subMenuResolution(int option)
 		case 4:
 			glutReshapeWindow(1920, 1080);
 			glutPostRedisplay();
-			break;
-	}
-
-}
-
-void subMenuChangeSetence(int option)
-{
-	switch (option)
-	{
-
-		case 1:
-			//cout << "Frase do Display alterada para \"Ola Mundo\"" << endl;
-			break;
-		case 2:
-			//cout << "Frase do Display alterada para \"hello World\"" << endl;
-			break;
-		case 3:
-			//cout << "Frase do Display alterada para \"Computação Grafica\"" << endl;
-			break;
-		case 4:
-			//cout << "Frase do Display alterada para \"GAC104\"" << endl;
 			break;
 	}
 
@@ -418,9 +446,8 @@ void menuPrincipal(int option)
 
 void menuPopUp()
 {
-	int sMenuResolution, sMenuChangeSetence,
-		sMenuLight0, sMenuLighting, sMenuColorVideoGame,
-		sMenuBackgroundColor;
+	int sMenuResolution, sMenuLight0, sMenuLighting, 
+		sMenuColorVideoGame, sMenuBackgroundColor;
 
 	sMenuResolution = glutCreateMenu(subMenuResolution);
 
@@ -428,13 +455,6 @@ void menuPopUp()
 	glutAddMenuEntry("HD", 3);
 	glutAddMenuEntry("FHD", 4);
 	glutAddMenuEntry("Tela Cheia", 1);
-
-	sMenuChangeSetence = glutCreateMenu(subMenuChangeSetence);
-
-	glutAddMenuEntry("Olá Mundo", 1);
-	glutAddMenuEntry("Hello World", 2);
-	glutAddMenuEntry("Computação Gráfica", 3);
-	glutAddMenuEntry("GAC104", 4);
 
 	sMenuLight0 = glutCreateMenu(subMenuLight0);
 
@@ -463,7 +483,6 @@ void menuPopUp()
 	glutCreateMenu(menuPrincipal);
 
 	glutAddSubMenu("Resolução", sMenuResolution);
-	glutAddSubMenu("frase do Display", sMenuChangeSetence);
 	glutAddSubMenu("Cor do Video-Game ", sMenuColorVideoGame);
 	glutAddSubMenu("Cor de Fundo ", sMenuBackgroundColor);
 	glutAddSubMenu("Luz 0", sMenuLight0);
@@ -480,14 +499,15 @@ void animationVideoGame(int value = 1)
 {
 	if (animationState == TRUE)
 	{
+		
 		if (action == "up")
 			height += 0.15f;
 		else 
 			height -= 0.15f;
-		
-		if (height > 7)
+
+		if (height > 12)
 		{
-			height = 7;
+			height = 12;
 			action = "down";
 		}
 
@@ -513,7 +533,7 @@ void animationDisplayVideoGame(int value = 1)
 
 		glutPostRedisplay();
 
-		glutTimerFunc(100, animationDisplayVideoGame, value);
+		glutTimerFunc(110, animationDisplayVideoGame, value);
 	}
 }
 
@@ -582,7 +602,7 @@ void reshape(int w, int h)
 	gluPerspective(60, aspect, 0.5, 100);
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	gluLookAt(30, -10, 25, 0, 0, 0, 0, 0, 1);
+	gluLookAt(40, -10, 30, 0, 0, 0, 0, 0, 1);
 }
 
 // Teclado e Mouse
