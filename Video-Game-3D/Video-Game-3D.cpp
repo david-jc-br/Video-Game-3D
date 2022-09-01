@@ -7,19 +7,21 @@ using namespace std;
 // Variavéis Globais 
 //--------------------------------------------------------------------------------------
 
-int w = 1920, h = 1080; 
+int w = 1920, h = 1080; // largura e altura da janela
 
-GLfloat R = 0.0f, G = 0.0f, B = 0.0f; // RGB animação 
+GLfloat R = 0.0f, G = 0.0f, B = 0.0f; // RGB da animação do display
 
 string action = "up"; // ação da animação se é subir ou descer
 
-GLfloat angle = 15; // angulo inicial da animação
+GLfloat angle = 15; // ângulo inicial da animação
 
-GLfloat height = 0; // altura inicial da animãção 
+GLfloat height = 1; // altura inicial da animação 
 
 bool animationState = TRUE; // Estado da animação (se ativado ou desativado)
 
-short colorVideoGame = 1, backgroundColor = 1; // Cor do video-game e do fundo
+bool arrowColor = TRUE; // Cor da seta indicadora (se verde, vermolho ou preto)
+
+short videoGameColor = 1, forkliftColor = 1, background = 1;
 
 // Definções da textura 
 //--------------------------------------------------------------------------------------
@@ -50,67 +52,233 @@ void makeCheckImage(void)
 //--------------------------------------------------------------------------------------
 void drawBox()
 {
-	switch (backgroundColor)
+
+	switch (background)
 	{
 	case 1:
-		glColor3f(0.1f, 0.5f, 0.6f); // azul 
+		glColor3f(0.8f, 0.8f, 0.8f); // cinza 
 		break;
 	case 2:
 		glColor3f(0.5f, 0.6f, 0.0f); // verde
 		break;
-	case 3:
-		glColor3f(0.4f, 0.3f, 0.1f); // marrom
-		break;
-	case 4:
-		glColor3f(0.6f, 0.2f, 0.2f); // vermelho
-		break;
 	}
 
 	glPushMatrix();
-	glTranslated(0, 0, 42.5);
+	glTranslated(0, 0, 42.4);
 	glutSolidCube(85);
 	glPopMatrix();
+
+	glBegin(GL_QUADS);
+		glColor3f(0.4f, 0.4f, 0.4f);
+		glNormal3f(-1.f, 0.f, 0.f);
+		glVertex3d(-42.5, -42.5, 0); 
+		glVertex3d(-42.5, 42.5, 0);
+		glVertex3d(42.5, 42.5, 0);
+		glVertex3d(42.5, -42.5, 0);
+	glEnd();
 }
 
-void drawBodyForklift()
+void drawForklift()
 {
-	glColor3f(0.9f, 0.5f, 0.2f);
-	glPushMatrix();
-	glRotated(0, 0, 0, 0);
-	glTranslated(6, 6, 5);
-	glScaled(1,1,0.7);
-	glutSolidCube(9);
-	glPopMatrix();
+	switch (forkliftColor)
+	{
+	case 1:
+		glColor3f(0.9f, 0.5f, 0.2f); // laranja 
+		break;
+	case 2:
+		glColor3f(0.9f, 0.9f, 0.2f); // amarelo
+		break;
+	}
+
+	glBegin(GL_QUADS);
+		glNormal3f(-1.f, 0.f, 0.f);
+		glVertex3i(-3, 13, 1); // fundo
+		glVertex3i(-3, 22, 1);
+		glVertex3i(6, 22, 1);
+		glVertex3i(6, 13, 1);
+
+		glNormal3f(-1.f, 0.f, 0.f);
+		glVertex3i(-3, 20, 6); // tampa motor
+		glVertex3i(-3, 22, 6);
+		glVertex3i(6, 22, 6);
+		glVertex3i(6, 20, 6);
+
+		glNormal3f(-1.f, 0.f, 0.f);
+		glVertex3i(-3, 16, 12); // topo
+		glVertex3i(-3, 20, 12);
+		glVertex3i(6, 20, 12);
+		glVertex3i(6, 16, 12);
+
+		glNormal3f(0.f, 0.f, -1.f);
+		glVertex3i(6, 13, 1); // esquerdo
+		glVertex3i(6, 22, 1);
+		glVertex3i(6, 22, 6);
+		glVertex3i(6, 13, 6); 
+
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(-3, 13, 1); // direito
+		glVertex3i(-3, 22, 1);
+		glVertex3i(-3, 22, 6);
+		glVertex3i(-3, 13, 6);
+
+		glNormal3f(0.f, 1.f, 0.f);
+		glVertex3i(-3, 13, 1);  // frente
+		glVertex3i(6, 13, 1);
+		glVertex3i(6, 13, 6);
+		glVertex3i(-3, 13, 6);  
+
+		glNormal3f(0.f, -1.f, 0.f);
+		glVertex3i(-3, 22, 1);  // traseira
+		glVertex3i(6, 22, 1);
+		glVertex3i(6, 22, 6);
+		glVertex3i(-3, 22, 6);
+	glEnd();
+
+	glBegin(GL_QUADS);
+		glColor4f(0.2f, 0.2f, 0.2f, 0.5);
+		glNormal3f(0.f, 0.f, -1.f);
+		glVertex3i(6, 13, 6); //  janela esquerda
+		glVertex3i(6, 20, 6);
+		glVertex3i(6, 20, 12);
+		glVertex3i(6, 16, 12);
+
+		glNormal3f(0.f, 0.f, 1.f);
+		glVertex3i(-3, 13, 6); // janela direita
+		glVertex3i(-3, 20, 6);
+		glVertex3i(-3, 20, 12);
+		glVertex3i(-3, 16, 12);
+
+		glNormal3f(0.f, -1.f, 0.f);
+		glVertex3i(-3, 20, 6);  // janela traseira
+		glVertex3i(6, 20, 6);
+		glVertex3i(6, 20, 12);
+		glVertex3i(-3, 20, 12);
+
+		glNormal3f(0.f, 1.f, 0.f);
+		glVertex3i(-3, 13, 6);  // janela frontal
+		glVertex3i(6, 13, 6);
+		glVertex3i(6, 16, 12);
+		glVertex3i(-3, 16, 12);
+
+	glEnd();
+
+	glBegin(GL_QUADS);// suporte frontal
+		glColor3f(0.9f, 0.5f, 0.2f);
+		glNormal3f(0.f, 1.f, 0.f);
+		glVertex3d(-3, 11, 1);  
+		glVertex3d(6, 11, 1);
+		glVertex3d(6, 11, 13);
+		glVertex3d(-3, 11, 13);
+
+		glColor3f(0.2f, 0.2f, 0.2f);
+		glNormal3d(-1.f, 0.f, 0.f);
+		glVertex3d(2, 11, 3);
+		glVertex3d(2, 13, 3);
+		glVertex3d(4, 13, 3);
+		glVertex3d(4, 11, 3);
+	glEnd();
+
+
+	glColor3f(0.2f, 0.2f, 0.2f);
+	glNormal3f(0.f, 0.f, -1.f);
+	glBegin(GL_POLYGON);// pneus do lado esquerdo
+		glVertex3d(6.1, 14, 1);
+		glVertex3d(6.1, 14, 2);
+		glVertex3d(6.1, 15, 3);
+		glVertex3d(6.1, 16, 3);
+		glVertex3d(6.1, 17, 2);
+		glVertex3d(6.1, 17, 1);
+		glVertex3d(6.1, 16, 0);
+		glVertex3d(6.1, 15, 0);
+	glEnd();
+
+	glBegin(GL_POLYGON);
+		glVertex3d(6.1, 18, 1);
+		glVertex3d(6.1, 18, 2);
+		glVertex3d(6.1, 19, 3);
+		glVertex3d(6.1, 20, 3);
+		glVertex3d(6.1, 21, 2);
+		glVertex3d(6.1, 21, 1);
+		glVertex3d(6.1, 20, 0);
+		glVertex3d(6.1, 19, 0);
+	glEnd();
+
+	glBegin(GL_POLYGON);// pneus do lado direito
+		glVertex3d(-3.1, 14, 1);
+		glVertex3d(-3.1, 14, 2);
+		glVertex3d(-3.1, 15, 3);
+		glVertex3d(-3.1, 16, 3);
+		glVertex3d(-3.1, 17, 2);
+		glVertex3d(-3.1, 17, 1);
+		glVertex3d(-3.1, 16, 0);
+		glVertex3d(-3.1, 15, 0);
+	glEnd();
+
+	glBegin(GL_POLYGON); 
+		glVertex3d(-3.1, 18, 1);
+		glVertex3d(-3.1, 18, 2);
+		glVertex3d(-3.1, 19, 3);
+		glVertex3d(-3.1, 20, 3);
+		glVertex3d(-3.1, 21, 2);
+		glVertex3d(-3.1, 21, 1);
+		glVertex3d(-3.1, 20, 0);
+		glVertex3d(-3.1, 19, 0);
+	glEnd();
+
+	glBegin(GL_QUADS); // farol traseiro
+		glColor3f(1.0f, 0.2f, 0.1f);
+		glNormal3f(0.f, -1.f, 0.f);
+		glVertex3d(6, 22.01, 6);
+		glVertex3d(4, 22.01, 6);
+		glVertex3d(4, 22.01, 5);
+		glVertex3d(6, 22.01, 5);
+
+		glVertex3d(-3, 22.01, 6);
+		glVertex3d(-1, 22.01, 6);
+		glVertex3d(-1, 22.01, 5);
+		glVertex3d(-3, 22.01, 5);
+	glEnd();
 }
 
 void drawArmsForklift()
 {
+	glBegin(GL_QUADS);
+		glColor3f(0.2f, 0.2f, 0.2f);
+		glNormal3d(-1.f, 0.f, 0.f);
+		glVertex3d(-3, -1, 0.02); 
+		glVertex3d(-3, 10, 0.02);
+		glVertex3d(6, 10, 0.02);
+		glVertex3d(6, -1, 0.02);
 
+		glNormal3d(-1.f, 0.f, 0.f);
+		glVertex3d(-1, -1, 0.01);
+		glVertex3d(-1, 11, 0.01);
+		glVertex3d(4, 11, 0.01);
+		glVertex3d(4, -1, 0.01);
+	glEnd();
 }
 
 void drawArrows()
 {
-	glBegin(GL_TRIANGLES); // x positivo
+	if (arrowColor == TRUE)
 		glColor3f(0.4f, 0.9f, 0.0f);
-		glNormal3f(0.f, 0.f, -1.f);
-		glVertex3i(42, -5, 15);
-		glVertex3i(42, 0, 20);
-		glVertex3i(42, 5, 15);
+	else
+		glColor3f(0.2f, 0.2f, 0.2f);
 
-		glColor3f(1.0f, 0.1f, 0.1f);
-		glVertex3i(42, -5, 14);
-		glVertex3i(42, 0, 9);
-		glVertex3i(42, 5, 14);
-	glEnd();
-
-	glBegin(GL_TRIANGLES); // x negativo
-		glColor3f(0.4f, 0.9f, 0.0f);
+	glBegin(GL_TRIANGLES); 
 		glNormal3f(0.f, 0.f, 1.f);
 		glVertex3i(-42, -5, 15);
 		glVertex3i(-42, 0, 20);
 		glVertex3i(-42, 5, 15);
+	glEnd();
 
+	if (arrowColor == FALSE)
 		glColor3f(1.0f, 0.1f, 0.1f);
+	else 
+		glColor3f(0.2f, 0.2f, 0.2f);
+
+	glBegin(GL_TRIANGLES); 
+		glNormal3f(0.f, 0.f, 1.f);
 		glVertex3i(-42, -5, 14);
 		glVertex3i(-42, 0, 9);
 		glVertex3i(-42, 5, 14);
@@ -132,6 +300,16 @@ void drawDisplayVideoGame()
 
 void drawBodyVideoGame()
 {
+	switch (videoGameColor)
+	{
+	case 1:
+		glColor3f(0.1f, 0.5f, 0.6f); // azul 
+		break;
+	case 2:
+		glColor3f(0.4f, 0.9f, 0.3f); // verde
+		break;
+	}
+
 	glBegin(GL_QUADS);
 		glNormal3f(0.f, 0.f, -1.f);
 		glVertex3i(3, 0, 15);// frente
@@ -267,7 +445,7 @@ void drawButtonsVideoGame()
 
 void drawCargoCover()
 {
-	glColor3f(0.7f, 0.0f, 0.0f);
+	glColor3f(0.7f, 0.0f, 0.0f); // cargo cover
 	glTranslated(0, 0, 0.001);
 	glBegin(GL_QUADS);
 		glNormal3f(0.f, 1.f, 0.f);
@@ -289,23 +467,6 @@ void drawCargoCover()
 
 void drawVideoGame()
 {
-
-	switch (colorVideoGame)
-	{
-		case 1:
-			glColor3f(0.8f, 0.8f, 0.8f); // cinza 
-			break;
-		case 2: 
-			glColor3f(0.4f, 0.9f, 0.3f); // verde
-			break;
-		case 3:
-			glColor3f(0.7f, 0.5f, 0.0f); // amarelo
-			break;
-		case 4:
-			glColor3f(0.7f, 0.3f, 0.7f); // roxo
-			break;
-	}
-
 	drawBodyVideoGame();
 	drawDisplayVideoGame();
 	drawButtonsVideoGame();
@@ -317,12 +478,16 @@ void display()
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	glColor3f(0.0f, 0.0f, 0.0f);
 
-
 	glPushMatrix();
 	glRotatef(angle, 0, 0, 1);
 	drawBox();
+	glTranslatef(6, -12, 0);
 	drawArrows();
-	drawBodyForklift();
+	drawForklift();
+	glPopMatrix();
+
+	glPushMatrix();
+	glRotatef(angle, 0, 0, 1);
 	glTranslatef(6, -12, height);
 	drawVideoGame();
 	drawArmsForklift();
@@ -355,7 +520,6 @@ void subMenuResolution(int option)
 			glutPostRedisplay();
 			break;
 	}
-
 }
 
 void subMenuLight0(int option)
@@ -393,19 +557,11 @@ void subMenuColorVideoGame(int option)
 	switch (option)
 	{
 		case 1:
-			colorVideoGame = 1;
+			videoGameColor = 1;
 			glutPostRedisplay();
 			break;
 		case 2:
-			colorVideoGame = 2;
-			glutPostRedisplay();
-			break;
-		case 3:
-			colorVideoGame = 3;
-			glutPostRedisplay();
-			break;
-		case 4:
-			colorVideoGame = 4;
+			videoGameColor = 2;
 			glutPostRedisplay();
 			break;
 	}
@@ -416,19 +572,11 @@ void subMenuBackgroundColor(int option)
 	switch (option)
 	{
 	case 1:
-		backgroundColor = 1;
+		background = 1;
 		glutPostRedisplay();
 		break;
 	case 2:
-		backgroundColor = 2;
-		glutPostRedisplay();
-		break;
-	case 3:
-		backgroundColor = 3;
-		glutPostRedisplay();
-		break;
-	case 4:
-		backgroundColor = 4;
+		background = 2;
 		glutPostRedisplay();
 		break;
 	}
@@ -436,12 +584,8 @@ void subMenuBackgroundColor(int option)
 
 void menuPrincipal(int option)
 {
-	switch (option)
-	{
-		case 0:
-			exit(0);
-			break;
-	}
+	if (option == 0)
+		exit(0);
 }
 
 void menuPopUp()
@@ -468,17 +612,13 @@ void menuPopUp()
 
 	sMenuColorVideoGame = glutCreateMenu(subMenuColorVideoGame);
 
-	glutAddMenuEntry("Cinza", 1);
+	glutAddMenuEntry("Azul", 1);
 	glutAddMenuEntry("Verde", 2);
-	glutAddMenuEntry("Amarelo", 3);
-	glutAddMenuEntry("Roxo", 4);
 
 	sMenuBackgroundColor = glutCreateMenu(subMenuBackgroundColor);
 
-	glutAddMenuEntry("Azul", 1);
+	glutAddMenuEntry("Cinza", 1);
 	glutAddMenuEntry("Verde", 2);
-	glutAddMenuEntry("Marrom", 3);
-	glutAddMenuEntry("Vermelho", 4);
 
 	glutCreateMenu(menuPrincipal);
 
@@ -500,7 +640,7 @@ void animationVideoGame(int value = 1)
 	if (animationState == TRUE)
 	{
 		
-		if (action == "up")
+		if (action == "up") 
 			height += 0.15f;
 		else 
 			height -= 0.15f;
@@ -509,16 +649,17 @@ void animationVideoGame(int value = 1)
 		{
 			height = 12;
 			action = "down";
+			arrowColor = FALSE;
 		}
 
-		if (height < 0)
+		if (height < 1.0f)
 		{
-			height = 0.0f;
+			height = 1.0f;
 			action = "up";
+			arrowColor = TRUE;
 		}
 
 		glutPostRedisplay();
-
 		glutTimerFunc(30, animationVideoGame, value);
 	}
 }
@@ -532,7 +673,6 @@ void animationDisplayVideoGame(int value = 1)
 		B = rand() % 2;
 
 		glutPostRedisplay();
-
 		glutTimerFunc(110, animationDisplayVideoGame, value);
 	}
 }
@@ -566,26 +706,28 @@ void init()
 	glEnable(GL_DEPTH_TEST);
 	glEnable(GL_DEPTH);
 	glShadeModel(GL_FLAT);
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
 	makeCheckImage();
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
-#ifdef GL_VERSION_1_1
-	glGenTextures(1, &texName);
-	glBindTexture(GL_TEXTURE_2D, texName);
-#endif
+	#ifdef GL_VERSION_1_1
+		glGenTextures(1, &texName);
+		glBindTexture(GL_TEXTURE_2D, texName);
+	#endif
 
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
-#ifdef GL_VERSION_1_1
-	glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, checkImageHeight,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-#else
-	glTexImage2D(GL_TEXTURE_2D, 0, 4, checkImageWidth, checkImageHeight,
-		0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
-#endif
+	#ifdef GL_VERSION_1_1
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, checkImageWidth, checkImageHeight,
+			0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	#else
+		glTexImage2D(GL_TEXTURE_2D, 0, 4, checkImageWidth, checkImageHeight,
+			0, GL_RGBA, GL_UNSIGNED_BYTE, checkImage);
+	#endif
 
 	glutFullScreen();
 	animationVideoGame();
@@ -610,23 +752,20 @@ void reshape(int w, int h)
 
 void keyboard(unsigned char key, int x, int y)
 {
-	switch (key)
-	{
-		case 27: 
-			exit(0);
-			break;
-	}
+	if (key == 27)
+		exit(0);
 }
 
 void specialKeys(int key, int x, int y)
 {
 	switch (key)
 	{
-		case GLUT_KEY_RIGHT:
+		case GLUT_KEY_RIGHT: 
 			angle += 5.0f;
 
 			if (angle >= 360.0f)
 				angle = 0.0f;
+
 			glutPostRedisplay();
 			break;
 		case GLUT_KEY_LEFT:
@@ -634,6 +773,7 @@ void specialKeys(int key, int x, int y)
 
 			if (angle <= -360.0f)
 				angle = 0.0f;
+
 			glutPostRedisplay();
 			break;
 	}
@@ -641,14 +781,14 @@ void specialKeys(int key, int x, int y)
 
 void mouse(int button, int state, int x, int y)
 {
-	
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) // pausa a animação
+	// pausa a animação
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) 
 	{
 		animationState = FALSE;
 		glutPostRedisplay();
 	}
-
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) // retorna a animaação
+	// retorna a animação
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) 
 	{
 		animationState = TRUE;
 		animationVideoGame();
