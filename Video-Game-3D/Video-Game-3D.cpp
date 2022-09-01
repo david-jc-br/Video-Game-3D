@@ -19,7 +19,7 @@ GLfloat height = 1; // altura inicial da animação
 
 bool animationState = TRUE; // Estado da animação (se ativado ou desativado)
 
-bool arrowColor = TRUE; // Cor da seta indicadora (se verde, vermolho ou preto)
+bool arrowColor = TRUE; // Cor da seta indicadora (se verde, vermelho ou preto)
 
 short videoGameColor = 1, forkliftColor = 1, background = 1;
 
@@ -52,14 +52,13 @@ void makeCheckImage(void)
 //--------------------------------------------------------------------------------------
 void drawBox()
 {
-
 	switch (background)
 	{
 	case 1:
 		glColor3f(0.8f, 0.8f, 0.8f); // cinza 
 		break;
 	case 2:
-		glColor3f(0.5f, 0.6f, 0.0f); // verde
+		glColor3f(1.0f, 1.0f, 1.0f); // branco
 		break;
 	}
 
@@ -69,7 +68,7 @@ void drawBox()
 	glPopMatrix();
 
 	glBegin(GL_QUADS);
-		glColor3f(0.4f, 0.4f, 0.4f);
+		glColor3f(0.5f, 0.5f, 0.5f);
 		glNormal3f(-1.f, 0.f, 0.f);
 		glVertex3d(-42.5, -42.5, 0); 
 		glVertex3d(-42.5, 42.5, 0);
@@ -134,6 +133,21 @@ void drawForklift()
 		glVertex3i(-3, 22, 6);
 	glEnd();
 
+	glBegin(GL_QUADS);// suporte frontal
+		glNormal3f(0.f, 1.f, 0.f);
+		glVertex3d(-3, 11, 1);
+		glVertex3d(6, 11, 1);
+		glVertex3d(6, 11, 13);
+		glVertex3d(-3, 11, 13);
+
+		glColor3f(0.2f, 0.2f, 0.2f);
+		glNormal3d(-1.f, 0.f, 0.f);
+		glVertex3d(0, 11, 3);
+		glVertex3d(0, 13, 3);
+		glVertex3d(4, 13, 3);
+		glVertex3d(4, 11, 3);
+	glEnd();
+
 	glBegin(GL_QUADS);
 		glColor4f(0.2f, 0.2f, 0.2f, 0.5);
 		glNormal3f(0.f, 0.f, -1.f);
@@ -161,23 +175,6 @@ void drawForklift()
 		glVertex3i(-3, 16, 12);
 
 	glEnd();
-
-	glBegin(GL_QUADS);// suporte frontal
-		glColor3f(0.9f, 0.5f, 0.2f);
-		glNormal3f(0.f, 1.f, 0.f);
-		glVertex3d(-3, 11, 1);  
-		glVertex3d(6, 11, 1);
-		glVertex3d(6, 11, 13);
-		glVertex3d(-3, 11, 13);
-
-		glColor3f(0.2f, 0.2f, 0.2f);
-		glNormal3d(-1.f, 0.f, 0.f);
-		glVertex3d(2, 11, 3);
-		glVertex3d(2, 13, 3);
-		glVertex3d(4, 13, 3);
-		glVertex3d(4, 11, 3);
-	glEnd();
-
 
 	glColor3f(0.2f, 0.2f, 0.2f);
 	glNormal3f(0.f, 0.f, -1.f);
@@ -303,10 +300,10 @@ void drawBodyVideoGame()
 	switch (videoGameColor)
 	{
 	case 1:
-		glColor3f(0.1f, 0.5f, 0.6f); // azul 
+		glColor3f(0.0f, 0.5f, 0.9f); // azul 
 		break;
 	case 2:
-		glColor3f(0.4f, 0.9f, 0.3f); // verde
+		glColor3f(0.5f, 0.3f, 0.5f); // Roxo
 		break;
 	}
 
@@ -339,22 +336,22 @@ void drawBodyVideoGame()
 		glVertex3i(0, 0, 15); // trazeira
 		glVertex3i(0, 10, 15);
 		glVertex3i(0, 10, 0);
-		glVertex3i(0, 0, 0);
-		
+		glVertex3i(0, 0, 0);	
 	glEnd();
 
-	glEnable(GL_TEXTURE_2D);
-	glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
-#ifdef GL_VERSION_1_1
-	glBindTexture(GL_TEXTURE_2D, texName);
-#endif
+		glEnable(GL_TEXTURE_2D);
+		glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_DECAL);
+	#ifdef GL_VERSION_1_1
+		glBindTexture(GL_TEXTURE_2D, texName);
+	#endif
 
 	glBegin(GL_QUADS);
-		glTexCoord2f(0.0, 0.0);glVertex3i(0, 10, 15); // topo
-		glTexCoord2f(0.0, 1.0);glVertex3i(0, 0, 15);
-		glTexCoord2f(1.0, 1.0);glVertex3i(3, 0, 15);
-		glTexCoord2f(1.0, 0.0);glVertex3i(3, 10, 15);
+		glTexCoord2f(0.0, 0.0); glVertex3i(0, 10, 15); // topo
+		glTexCoord2f(0.0, 1.0); glVertex3i(0, 0, 15);
+		glTexCoord2f(1.0, 1.0); glVertex3i(3, 0, 15);
+		glTexCoord2f(1.0, 0.0); glVertex3i(3, 10, 15);
 	glEnd();
+
 	glDisable(GL_TEXTURE_2D);
 }
 
@@ -552,7 +549,7 @@ void subMenuLighting(int option)
 	}
 }
 
-void subMenuColorVideoGame(int option)
+void subMenuVideoGameColor(int option)
 {
 	switch (option)
 	{
@@ -567,7 +564,22 @@ void subMenuColorVideoGame(int option)
 	}
 }
 
-void subMenuBackgroundColor(int option)
+void subMenuForkliftColor(int option)
+{
+	switch (option)
+	{
+	case 1:
+		forkliftColor = 1;
+		glutPostRedisplay();
+		break;
+	case 2:
+		forkliftColor = 2;
+		glutPostRedisplay();
+		break;
+	}
+}
+
+void subMenuBackground(int option)
 {
 	switch (option)
 	{
@@ -582,7 +594,7 @@ void subMenuBackgroundColor(int option)
 	}
 }
 
-void menuPrincipal(int option)
+void subMenuExit(int option)
 {
 	if (option == 0)
 		exit(0);
@@ -590,8 +602,8 @@ void menuPrincipal(int option)
 
 void menuPopUp()
 {
-	int sMenuResolution, sMenuLight0, sMenuLighting, 
-		sMenuColorVideoGame, sMenuBackgroundColor;
+	int sMenuResolution, sMenuLight0, sMenuLighting,
+		sMenuVideoGameColor, sMenuBackground, sMenuForkliftColor;
 
 	sMenuResolution = glutCreateMenu(subMenuResolution);
 
@@ -610,23 +622,29 @@ void menuPopUp()
 	glutAddMenuEntry("Ativar", 1);
 	glutAddMenuEntry("Desativar", 2);
 
-	sMenuColorVideoGame = glutCreateMenu(subMenuColorVideoGame);
+	sMenuVideoGameColor = glutCreateMenu(subMenuVideoGameColor);
 
 	glutAddMenuEntry("Azul", 1);
-	glutAddMenuEntry("Verde", 2);
+	glutAddMenuEntry("Roxo", 2);
 
-	sMenuBackgroundColor = glutCreateMenu(subMenuBackgroundColor);
+	sMenuForkliftColor = glutCreateMenu(subMenuForkliftColor);
+
+	glutAddMenuEntry("Laranja", 1);
+	glutAddMenuEntry("Amarelo", 2);
+
+	sMenuBackground = glutCreateMenu(subMenuBackground);
 
 	glutAddMenuEntry("Cinza", 1);
-	glutAddMenuEntry("Verde", 2);
+	glutAddMenuEntry("Branco", 2);
 
-	glutCreateMenu(menuPrincipal);
+	glutCreateMenu(subMenuExit);
 
-	glutAddSubMenu("Resolução", sMenuResolution);
-	glutAddSubMenu("Cor do Video-Game ", sMenuColorVideoGame);
-	glutAddSubMenu("Cor de Fundo ", sMenuBackgroundColor);
-	glutAddSubMenu("Luz 0", sMenuLight0);
+	glutAddSubMenu("Cor do Video-Game ", sMenuVideoGameColor);
+	glutAddSubMenu("Cor da Empilhadeira ", sMenuForkliftColor);
+	glutAddSubMenu("Cor de Fundo ", sMenuBackground);
 	glutAddSubMenu("Iluminação", sMenuLighting);
+	glutAddSubMenu("Luz 0", sMenuLight0);
+	glutAddSubMenu("Resolução", sMenuResolution);
 	glutAddMenuEntry("Sair", 0);
 
 	glutAttachMenu(GLUT_RIGHT_BUTTON);
@@ -760,15 +778,15 @@ void specialKeys(int key, int x, int y)
 {
 	switch (key)
 	{
-		case GLUT_KEY_RIGHT: 
+		case GLUT_KEY_RIGHT: // rotaciona para direita
 			angle += 5.0f;
 
-			if (angle >= 360.0f)
+			if (angle >= 360.0f)  
 				angle = 0.0f;
 
 			glutPostRedisplay();
 			break;
-		case GLUT_KEY_LEFT:
+		case GLUT_KEY_LEFT: // rotaciona para esquerda
 			angle -= 5.f;
 
 			if (angle <= -360.0f)
@@ -782,7 +800,7 @@ void specialKeys(int key, int x, int y)
 void mouse(int button, int state, int x, int y)
 {
 	// pausa a animação
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_DOWN) 
+	if (button == GLUT_LEFT_BUTTON) 
 	{
 		animationState = FALSE;
 		glutPostRedisplay();
