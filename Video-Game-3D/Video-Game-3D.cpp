@@ -1,5 +1,5 @@
-﻿#include <GL/glut.h>
-#include <GL/gl.h>
+﻿#include <GL/GLUT.h>
+#include <GL/glu.h>
 #include <iostream>
 
 using namespace std;
@@ -17,9 +17,9 @@ GLfloat angle = 15; // ângulo inicial da animação
 
 GLfloat height = 1; // altura inicial da animação 
 
-bool animationState = TRUE; // Estado da animação (se ativado ou desativado)
+bool animationState = true; // Estado da animação (se ativado ou desativado)
 
-bool arrowColor = TRUE; // Cor da seta indicadora (se verde, vermelho ou preto)
+bool arrowColor = true; // Cor da seta indicadora (se verde, vermelho ou preto)
 
 short videoGameColor = 1, forkliftColor = 1, background = 1;
 
@@ -257,7 +257,7 @@ void drawArmsForklift()
 
 void drawArrows()
 {
-	if (arrowColor == TRUE)
+	if (arrowColor == true)
 		glColor3f(0.4f, 0.9f, 0.0f);
 	else
 		glColor3f(0.2f, 0.2f, 0.2f);
@@ -269,7 +269,7 @@ void drawArrows()
 		glVertex3i(-42, 5, 15);
 	glEnd();
 
-	if (arrowColor == FALSE)
+	if (arrowColor == false)
 		glColor3f(1.0f, 0.1f, 0.1f);
 	else 
 		glColor3f(0.2f, 0.2f, 0.2f);
@@ -655,7 +655,7 @@ void menuPopUp()
 
 void animationVideoGame(int value = 1)
 {
-	if (animationState == TRUE)
+	if (animationState == true)
 	{
 		
 		if (action == "up") 
@@ -667,32 +667,32 @@ void animationVideoGame(int value = 1)
 		{
 			height = 12;
 			action = "down";
-			arrowColor = FALSE;
+			arrowColor = false;
 		}
 
 		if (height < 1.0f)
 		{
 			height = 1.0f;
 			action = "up";
-			arrowColor = TRUE;
+			arrowColor = true;
 		}
 
-		glutPostRedisplay();
-		glutTimerFunc(30, animationVideoGame, value);
 	}
+	glutPostRedisplay();
+	glutTimerFunc(30, animationVideoGame, value);
 }
 
 void animationDisplayVideoGame(int value = 1)
 {
-	if (animationState == TRUE)
+	if (animationState == true)
 	{
 		R = rand() % 2;
 		G = rand() % 2;
 		B = rand() % 2;
 
-		glutPostRedisplay();
-		glutTimerFunc(110, animationDisplayVideoGame, value);
 	}
+	glutTimerFunc(110, animationDisplayVideoGame, value);
+	glutPostRedisplay();
 }
 
 // Init e Reshape
@@ -800,19 +800,40 @@ void specialKeys(int key, int x, int y)
 void mouse(int button, int state, int x, int y)
 {
 	// pausa a animação
-	if (button == GLUT_LEFT_BUTTON) 
+	if (button == GLUT_LEFT_BUTTON )
 	{
-		animationState = FALSE;
+		animationState = false;
 		glutPostRedisplay();
 	}
 	// retorna a animação
-	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP) 
+	if (button == GLUT_LEFT_BUTTON && state == GLUT_UP)
 	{
-		animationState = TRUE;
-		animationVideoGame();
-		animationDisplayVideoGame();
+		animationState = true;
 		glutPostRedisplay();
 	}
+}
+
+void showFuntions()
+{
+	cout << "------------------------------------------------------------------------\n" 
+	     << "Funcoes do Mouse/Touchpad:\n"
+		 << "-> Segurar \'BOTAO ESQUERDO\' = Pausa animacao.\n" 
+		 << "-> Pessionar \'BOTAO DIREITO\' = Abre menu popUp.\n\n" 
+		 << "Funcoes do teclado:\n"
+		 << "-> Pressionar \'SETA PARA A DIREITA\' = Gira o ambiente para a direita.\n"
+		 << "-> Pressionar \'SETA PARA A ESQUERDA\' = Gira o ambiente para a esquerda.\n"
+		 << "-> Pressionar tecla \'ESC\' = Sai do programa.\n"
+		 << "------------------------------------------------------------------------" << endl;
+
+	cout << "\n------------------------------------------------------------------------\n"
+		 << "Mouse/Touchpad Functions:\n"
+		 << "-> Hold \'LEFT BUTTON\' = Pause animation\n"
+		 << "-> Press \'RIGHT BUTTON\' = Open pop-up menu\n\n"
+		 << "keyboard Functions:\n"
+		 << "-> Press \'RIGHT ARROW\' = Rotate the environment to the right.\n"
+		 << "-> Press \'LEFT ARROW\' = Rotate the environment to the left.\n"
+		 << "-> Press \'ESC\' key = Exit the program.\n"
+		 << "------------------------------------------------------------------------" << endl;
 }
 
 // Função Principal
@@ -826,6 +847,7 @@ int main(int argc, char** argv)
 	glutInitWindowSize(w, h);
 	glutCreateWindow("Video-Game-3D");
 	init();
+	showFuntions();
 	glutDisplayFunc(display);
 	menuPopUp();
 	glutKeyboardFunc(keyboard);
