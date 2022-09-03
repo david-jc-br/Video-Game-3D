@@ -778,7 +778,7 @@ void specialKeys(int key, int x, int y)
 {
 	switch (key)
 	{
-		case GLUT_KEY_RIGHT: // rotaciona para direita
+		case GLUT_KEY_LEFT: // rotaciona para esquerda
 			angle += 5.0f;
 
 			if (angle >= 360.0f)  
@@ -786,7 +786,7 @@ void specialKeys(int key, int x, int y)
 
 			glutPostRedisplay();
 			break;
-		case GLUT_KEY_LEFT: // rotaciona para esquerda
+		case GLUT_KEY_RIGHT: // rotaciona para direita
 			angle -= 5.f;
 
 			if (angle <= -360.0f)
@@ -800,7 +800,7 @@ void specialKeys(int key, int x, int y)
 void mouse(int button, int state, int x, int y)
 {
 	// pausa a animação
-	if (button == GLUT_LEFT_BUTTON )
+	if (button == GLUT_LEFT_BUTTON)
 	{
 		animationState = false;
 		glutPostRedisplay();
