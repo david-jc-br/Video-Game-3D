@@ -2,8 +2,6 @@
 
 ---
 
-> ### Projeto Final da Disciplina de Computação Gráfica.
-
 > ### Simples animação 3D Ultilizando a Linguagem C++, a API OpenGl, as Biblioteca FreeGLUT e GLU.
 
 ---
